@@ -11,4 +11,4 @@ Komponen yang diverifikasi:
 - Android Studio 2026.1.4.7 dan Android SDK 36
 - Device Windows, Chrome, dan Edge yang dikenali Flutter
 
-Screenshot hasil verifikasi berada pada folder `docs/screenshots`.
+Screenshot hasil verifikasi berada pada folder `../docs/screenshots`.
