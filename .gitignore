@@ -1,0 +1,8 @@
+.vscode/
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/android/local.properties
+docs/screenshots/setup-temp.png
+inst_user_settings.tmp
