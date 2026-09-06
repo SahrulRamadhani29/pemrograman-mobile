@@ -1,4 +1,4 @@
-# Laporan Week 1
+# Laporan minggu 1
 
 ## Identitas
 
@@ -7,92 +7,64 @@
 | Nama | Sahrul Ramadhani |
 | NIM | 244107020058 |
 | Kelas | TI-3C |
-| Mata Kuliah | Pemrograman Mobile |
+| Mata kuliah | Pemrograman Mobile |
 
 ## Tujuan
 
-1. Menyiapkan lingkungan pengembangan Dart dan Flutter.
-2. Memahami struktur project dan sintaks dasar Dart.
-3. Mempraktikkan variabel, tipe data, konstanta, operator, input, dan null safety.
-4. Mempraktikkan percabangan dan perulangan.
-5. Membuat dan menjalankan aplikasi Flutter pertama.
+Minggu pertama membahas persiapan Dart dan Flutter, dasar bahasa Dart, percabangan, perulangan, dan pembuatan aplikasi Flutter sederhana.
 
-## Sumber Materi
+## Sumber materi
 
-| Video | Materi |
-| --- | --- |
-| [Materi 1 Pengenalan Dart](https://www.youtube.com/watch?v=0B1xU-jpG7U) | Persiapan dan pengenalan Dart |
-| [Materi 2 Pengenalan Dart](https://www.youtube.com/watch?v=616Hw3GVZO0) | Membuat dan menjalankan project Dart |
-| [Materi 3 Pengenalan Dart](https://www.youtube.com/watch?v=gacbivZKuXk) | Sintaks dasar dan string interpolation |
-| [Variable dan type data Dart](https://www.youtube.com/watch?v=sldl7be31Mg) | Variabel, tipe data, operator, dan null safety |
-| [Perulangan Dart](https://www.youtube.com/watch?v=D3Ia9Aj1KZQ) | Percabangan, pengecekan, dan perulangan |
+1. [Pengenalan Dart 1](https://www.youtube.com/watch?v=0B1xU-jpG7U)
+2. [Pengenalan Dart 2](https://www.youtube.com/watch?v=616Hw3GVZO0)
+3. [Pengenalan Dart 3](https://www.youtube.com/watch?v=gacbivZKuXk)
+4. [Variabel dan tipe data](https://www.youtube.com/watch?v=sldl7be31Mg)
+5. [Perulangan Dart](https://www.youtube.com/watch?v=D3Ia9Aj1KZQ)
 
-## Praktikum 1 - Pengenalan Dart
+## Hasil praktikum
 
-Project dibuat menggunakan `dart create`. Program mengenalkan fungsi `main`, variabel dengan `var`, string interpolation, konversi `String` menjadi `int`, dan perintah `dart run`.
+Praktikum 1 berisi pengenalan project Dart, fungsi main, variabel, teks, dan konversi data.
 
-Materi video pertama sampai ketiga dicatat melalui pemeriksaan instalasi, pembuatan project Dart, pengenalan struktur folder, serta latihan teks kampus dan bahasa pemrograman.
+Praktikum 2 membahas tipe data, const, final, operator, input, List, Map, dynamic, dan null safety.
 
-## Praktikum 2 - Variabel dan Tipe Data
+Praktikum 3 membahas if dan else, ternary, switch, pengecekan nilai, serta perulangan. Tugas akhirnya mengolah nama dan nilai lima mahasiswa, lalu menentukan kategori A, B, atau C.
 
-Materi yang dipraktikkan mencakup `const`, `final`, `int`, `double`, `String`, `bool`, `List`, `Map`, `dynamic`, operator aritmetika, input terminal, serta nullable variable.
+Aplikasi Flutter pertama menampilkan nama, NIM, kelas, dan kampus.
 
-## Praktikum 3 - Percabangan dan Perulangan
+## Bukti praktikum
 
-Materi yang dipraktikkan mencakup `if/else`, ternary operator, `switch`, equality checking, `while`, `do-while`, `for`, `break`, dan `continue`.
-
-Tugas akhirnya menerima lima nama dan nilai mahasiswa, menyimpannya dalam `Map`, kemudian menentukan kategori A, B, atau C.
-
-## Flutter First App
-
-Aplikasi Flutter menampilkan identitas mahasiswa menggunakan widget dasar. Project dijalankan setelah `flutter doctor` dan pemeriksaan device berhasil dilakukan.
-
-## Bukti
-
-Screenshot instalasi, hasil pemeriksaan, output praktikum, dan aplikasi berada dalam folder [screenshots](screenshots/README.md).
-
-### Versi tools
+### Versi aplikasi
 
 ![Versi Git, Dart, dan Flutter](screenshots/01-tool-versions.png)
 
-### Flutter Doctor
+### Flutter doctor
 
 ![Hasil Flutter Doctor](screenshots/02-flutter-doctor.png)
 
-### Device Flutter
+### Perangkat Flutter
 
-![Daftar device Flutter](screenshots/03-flutter-devices.png)
+![Daftar perangkat Flutter](screenshots/03-flutter-devices.png)
 
-### Output praktikum Dart
+### Hasil program Dart
 
 ![Output praktikum Dart](screenshots/04-dart-practicum-output.png)
 
-### Validasi project Flutter
+### Pemeriksaan project Flutter
 
-![Hasil analisis dan pengujian Flutter](screenshots/05-flutter-validation.png)
+![Hasil pemeriksaan Flutter](screenshots/05-flutter-validation.png)
 
-### Aplikasi Flutter
+### Aplikasi profil
 
 ![Aplikasi profil mahasiswa](screenshots/06-flutter-profile-app.png)
 
-### Android Studio dan Android Emulator
+### Android Studio
 
-![Android Studio dan komponen Android SDK selesai disiapkan](screenshots/07-android-studio.png)
+![Android Studio dan Android SDK](screenshots/07-android-studio.png)
 
-### Build APK Android
+### Build APK
 
-![APK debug berhasil dibangun](screenshots/08-android-apk-build.png)
+![APK berhasil dibuat](screenshots/08-android-apk-build.png)
 
-## Refleksi
+## Kesimpulan
 
-### Kapan native lebih tepat dipilih daripada cross-platform?
-
-Native lebih tepat ketika aplikasi memerlukan performa sangat tinggi, integrasi perangkat yang spesifik, atau akses paling awal ke API platform. Cross-platform lebih efisien ketika satu basis kode perlu digunakan untuk Android dan iOS.
-
-### Bagaimana perubahan state berhubungan dengan widget tree dan UI deklaratif?
-
-Widget tree mendeskripsikan tampilan berdasarkan state. Ketika state berubah, Flutter membangun ulang bagian widget tree yang terdampak sehingga tampilan selalu mencerminkan data terbaru.
-
-### Mengapa commit kecil dengan pesan jelas bermanfaat?
-
-Commit kecil mempermudah penelusuran perubahan, code review, pencarian sumber kesalahan, kolaborasi tim, dan pembacaan perkembangan project sebagai portofolio.
+Dart, Flutter, Android Studio, dan Android SDK sudah terpasang. Semua latihan Dart berhasil dijalankan. Project Flutter juga berhasil diuji dan dibuat menjadi APK.
