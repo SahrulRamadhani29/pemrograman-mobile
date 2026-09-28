@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../controllers/player_controller.dart';
 import '../models/song.dart';
+import '../services/spotify_service.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/mini_player.dart';
 import 'home_page.dart';
@@ -17,7 +18,7 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   final PlayerController _player = PlayerController();
-  int currentIndex = 1;
+  int currentIndex = 0;
 
   @override
   void dispose() {
@@ -28,7 +29,7 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final pages = [
-      const HomePage(),
+      HomePage(onPlay: _selectLocalSong),
       TrendingPage(onPlay: _selectSong, onSongsLoaded: _player.setQueue),
       LyricsPage(
         player: _player,
@@ -47,7 +48,9 @@ class _MainShellState extends State<MainShell> {
                 song: _player.currentSong!,
                 isPlaying: _player.isPlaying,
                 onPlay: _player.toggle,
-                onOpen: () => setState(() => currentIndex = 2),
+                onOpen: _player.currentSong!.isLocal
+                    ? () => setState(() => currentIndex = 2)
+                    : () {},
               ),
             BottomNav(
               index: currentIndex,
@@ -68,6 +71,18 @@ class _MainShellState extends State<MainShell> {
         ),
       );
     }
-    if (available) setState(() => currentIndex = 2);
+    if (available && song.audioAsset != null) setState(() => currentIndex = 2);
+  }
+
+  Future<void> _selectLocalSong(Song song) async {
+    _player.setQueue(SpotifyService().getDownloadedSongs());
+    final available = await _player.selectSong(song);
+    if (!available && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('File audio lokal belum tersedia')),
+      );
+      return;
+    }
+    if (mounted) setState(() => currentIndex = 2);
   }
 }

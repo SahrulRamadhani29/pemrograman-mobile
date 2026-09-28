@@ -11,6 +11,7 @@ class Song {
     this.spotifyUrl,
     this.audioAsset,
     this.lyrics = const [],
+    this.isLocal = false,
   });
 
   final String id;
@@ -24,4 +25,5 @@ class Song {
   final String? spotifyUrl;
   final String? audioAsset;
   final List<String> lyrics;
+  final bool isLocal;
 }

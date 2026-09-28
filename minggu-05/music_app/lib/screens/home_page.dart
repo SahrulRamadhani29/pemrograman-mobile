@@ -1,28 +1,50 @@
 import 'package:flutter/material.dart';
 
+import '../models/song.dart';
+import '../services/spotify_service.dart';
+import '../widgets/song_card.dart';
+
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({required this.onPlay, super.key});
+
+  final ValueChanged<Song> onPlay;
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.music_note_rounded, size: 76, color: Colors.white24),
-            SizedBox(height: 20),
-            Text(
-              'Selamat datang',
-              style: TextStyle(fontSize: 27, fontWeight: FontWeight.w700),
+    final songs = SpotifyService().getDownloadedSongs();
+    return SafeArea(
+      bottom: false,
+      child: CustomScrollView(
+        slivers: [
+          const SliverPadding(
+            padding: EdgeInsets.fromLTRB(22, 24, 22, 6),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                'Koleksi Lokal',
+                style: TextStyle(fontSize: 34, fontWeight: FontWeight.w800),
+              ),
             ),
-            SizedBox(height: 8),
-            Text(
-              'Temukan lagu yang sedang kamu suka.',
-              style: TextStyle(color: Colors.white60),
+          ),
+          const SliverPadding(
+            padding: EdgeInsets.fromLTRB(22, 0, 22, 18),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                '10 lagu yang tersedia di perangkat ini',
+                style: TextStyle(color: Colors.white60),
+              ),
             ),
-          ],
-        ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 150),
+            sliver: SliverList.builder(
+              itemCount: songs.length,
+              itemBuilder: (context, index) => SongCard(
+                song: songs[index],
+                onPlay: () => onPlay(songs[index]),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

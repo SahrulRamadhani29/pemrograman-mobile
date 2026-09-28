@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/song.dart';
@@ -27,62 +26,35 @@ class SpotifyService {
             artist: artist,
             rank: entry.key + 1,
             artworkUrl: item['artworkUrl100'] as String?,
-            audioAsset: _audioFor(title),
-            lyrics: await _lyricsFor(title),
+            previewUrl: await _findPreview(title, artist),
+            // Trending is preview-only. Local assets belong to the Home list.
+            audioAsset: null,
+            lyrics: const [],
           );
         }),
       );
     } catch (_) {
-      return _fallback();
+      throw Exception('Gagal memuat chart');
     }
   }
 
-  String? _audioFor(String title) {
-    const files = <String, String>{
-      'Satu Bulan': 'assets/audio/Satu Bulan - Bernadya.mp3',
-      'Untungnya, Hidup Masih Berjalan':
-          'assets/audio/Untungnya, Hidup Harus Tetap Berjalan - Bernadya.mp3',
-      'Untungnya, Hidup Harus Tetap Berjalan':
-          'assets/audio/Untungnya, Hidup Harus Tetap Berjalan - Bernadya.mp3',
-      'Mati-Matian': 'assets/audio/Mati-Matian - Mahalini.mp3',
-      'Penjaga Hati': 'assets/audio/penjaga hati - Nadhif Basalamah.mp3',
-      'Rumah': 'assets/audio/Kita usahakan rumah itu - Sal Priadi.mp3',
-      'Kita usahakan rumah itu':
-          'assets/audio/Kita usahakan rumah itu - Sal Priadi.mp3',
-      'Terlalu Lama Sendiri':
-          'assets/audio/Terlalu Lama Sendiri - Kunto Aji.mp3',
-      'Hilang Tanpa Bilang': 'assets/audio/Hilang Tanpa Bilang - Meiska.mp3',
-      'Tak Segampang Itu': 'assets/audio/Tak Segampang Itu - Anggi Marito.mp3',
-      'Kita ke Sana': 'assets/audio/Kita Ke Sana - Hindia.mp3',
-    };
-    return files[title];
-  }
-
-  Future<List<String>> _lyricsFor(String title) async {
+  Future<String?> _findPreview(String title, String artist) async {
     try {
-      final source = await rootBundle.loadString('assets/lyrics/top10.txt');
-      final part = source
-          .split('====')
-          .firstWhere(
-            (value) => value.toLowerCase().contains(title.toLowerCase()),
-            orElse: () => '',
-          );
-      return part
-          .split(RegExp(r'\r?\n'))
-          .map((line) => line.trim())
-          .where(
-            (line) =>
-                line.isNotEmpty &&
-                !line.startsWith('Lagu ') &&
-                line != 'Informasi umum' &&
-                line != 'Lirik' &&
-                line != 'Share',
-          )
-          .toList();
+      final term = Uri.encodeQueryComponent('$title $artist');
+      final response = await http.get(
+        Uri.parse(
+          'https://itunes.apple.com/search?term=$term&country=id&media=music&entity=song&limit=1',
+        ),
+      );
+      if (response.statusCode != 200) return null;
+      final results = jsonDecode(response.body)['results'] as List<dynamic>;
+      return results.isEmpty ? null : results.first['previewUrl'] as String?;
     } catch (_) {
-      return const [];
+      return null;
     }
   }
+
+  List<Song> getDownloadedSongs() => _fallback();
 
   List<Song> _fallback() => const [
     Song(
@@ -92,6 +64,7 @@ class SpotifyService {
       rank: 1,
       artworkAsset: 'assets/images/cover.jpg',
       audioAsset: 'assets/audio/Satu Bulan - Bernadya.mp3',
+      isLocal: true,
     ),
     Song(
       id: '2',
@@ -100,6 +73,7 @@ class SpotifyService {
       rank: 2,
       audioAsset:
           'assets/audio/Untungnya, Hidup Harus Tetap Berjalan - Bernadya.mp3',
+      isLocal: true,
     ),
     Song(
       id: '3',
@@ -107,6 +81,7 @@ class SpotifyService {
       artist: 'Mahalini',
       rank: 3,
       audioAsset: 'assets/audio/Mati-Matian - Mahalini.mp3',
+      isLocal: true,
     ),
     Song(
       id: '4',
@@ -114,6 +89,7 @@ class SpotifyService {
       artist: 'Nadhif Basalamah',
       rank: 4,
       audioAsset: 'assets/audio/penjaga hati - Nadhif Basalamah.mp3',
+      isLocal: true,
     ),
     Song(
       id: '5',
@@ -121,6 +97,7 @@ class SpotifyService {
       artist: 'Sal Priadi',
       rank: 5,
       audioAsset: 'assets/audio/Kita usahakan rumah itu - Sal Priadi.mp3',
+      isLocal: true,
     ),
     Song(
       id: '6',
@@ -128,6 +105,7 @@ class SpotifyService {
       artist: 'Kunto Aji',
       rank: 6,
       audioAsset: 'assets/audio/Terlalu Lama Sendiri - Kunto Aji.mp3',
+      isLocal: true,
     ),
     Song(
       id: '7',
@@ -135,6 +113,7 @@ class SpotifyService {
       artist: 'Meiska',
       rank: 7,
       audioAsset: 'assets/audio/Hilang Tanpa Bilang - Meiska.mp3',
+      isLocal: true,
     ),
     Song(
       id: '8',
@@ -142,6 +121,7 @@ class SpotifyService {
       artist: 'Anggi Marito',
       rank: 8,
       audioAsset: 'assets/audio/Tak Segampang Itu - Anggi Marito.mp3',
+      isLocal: true,
     ),
     Song(
       id: '9',
@@ -149,6 +129,7 @@ class SpotifyService {
       artist: 'Hindia',
       rank: 9,
       audioAsset: 'assets/audio/Kita Ke Sana - Hindia.mp3',
+      isLocal: true,
     ),
     Song(
       id: '10',
@@ -156,6 +137,7 @@ class SpotifyService {
       artist: 'Nadin Amizah',
       rank: 10,
       audioAsset: 'assets/audio/Rayuan Perempuan Gila - Nadin Amizah.mp3',
+      isLocal: true,
     ),
   ];
 }

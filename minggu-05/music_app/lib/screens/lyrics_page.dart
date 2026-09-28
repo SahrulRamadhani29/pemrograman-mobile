@@ -51,15 +51,19 @@ class _LyricsPageState extends State<LyricsPage> {
   Widget build(BuildContext context) {
     final player = widget.player;
     final song = player.currentSong;
-    if (song == null) {
-      return const SafeArea(
+    if (song == null || !song.isLocal) {
+      return SafeArea(
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.music_note_rounded, size: 64, color: Colors.white24),
               SizedBox(height: 16),
-              Text('Belum ada lagu yang diputar'),
+              Text(
+                song == null
+                    ? 'Belum ada lagu yang diputar'
+                    : 'Lirik hanya tersedia untuk lagu lokal',
+              ),
               SizedBox(height: 6),
               Text(
                 'Putar lagu dari menu Trending',

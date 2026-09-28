@@ -37,6 +37,7 @@ dependencies:
   camera: ^0.12.1
   cunning_document_scanner: ^3.0.3
   gal: ^2.3.3
+  camera_android: ^0.10.12
 
 dev_dependencies:
   flutter_test:

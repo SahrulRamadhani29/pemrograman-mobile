@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../models/song.dart';
@@ -42,13 +43,31 @@ class PlayerController extends ChangeNotifier {
   }
 
   Future<bool> selectSong(Song song) async {
-    if (song.audioAsset == null) return false;
+    if (song.audioAsset == null && song.previewUrl == null) return false;
     try {
-      duration = await _player.setAsset(song.audioAsset!) ?? duration;
+      duration = song.audioAsset != null
+          ? await _player.setAsset(song.audioAsset!) ?? duration
+          : await _player.setUrl(song.previewUrl!) ??
+                const Duration(seconds: 30);
     } catch (_) {
       return false;
     }
-    currentSong = song;
+    final lyrics = song.isLocal
+        ? await _loadLyrics(song.title)
+        : const <String>[];
+    currentSong = Song(
+      id: song.id,
+      title: song.title,
+      artist: song.artist,
+      rank: song.rank,
+      artworkAsset: song.artworkAsset,
+      artworkUrl: song.artworkUrl,
+      artworkColor: song.artworkColor,
+      previewUrl: song.previewUrl,
+      audioAsset: song.audioAsset,
+      lyrics: lyrics,
+      isLocal: song.isLocal,
+    );
     currentIndex = queue.indexWhere((item) => item.id == song.id);
     await _player.play();
     notifyListeners();
@@ -96,6 +115,34 @@ class PlayerController extends ChangeNotifier {
 
   bool get isCurrentFavorite =>
       currentSong != null && favoriteIds.contains(currentSong!.id);
+
+  Future<List<String>> _loadLyrics(String title) async {
+    try {
+      final source = await rootBundle.loadString('assets/lyrics/top10.txt');
+      final section = source
+          .split(RegExp(r'\r?\n\s*={3,}\s*\r?\n'))
+          .firstWhere(
+            (part) => part.toLowerCase().contains(title.toLowerCase()),
+            orElse: () => '',
+          );
+      return section
+          .split(RegExp(r'\r?\n'))
+          .map((line) => line.trim())
+          .where((line) => line.isNotEmpty)
+          .where(
+            (line) =>
+                !line.startsWith('Lagu ') &&
+                !line.startsWith('Lirik Lagu ') &&
+                line != 'Informasi umum' &&
+                line != 'Lirik' &&
+                line != 'Share' &&
+                !RegExp(r'^=+$').hasMatch(line),
+          )
+          .toList();
+    } catch (_) {
+      return const [];
+    }
+  }
 
   void setQueue(List<Song> songs) {
     queue = List.unmodifiable(songs);

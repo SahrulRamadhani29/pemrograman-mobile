@@ -5,11 +5,16 @@ import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:gal/gal.dart';
 
-late List<CameraDescription> _cameras;
+List<CameraDescription> _cameras = const [];
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _cameras = await availableCameras();
+  try {
+    _cameras = await availableCameras();
+  } on CameraException {
+    // The home screen can still open and show a useful camera error.
+    _cameras = const [];
+  }
   runApp(const CameraApp());
 }
 
@@ -104,15 +109,20 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  late final CameraController _controller;
+  CameraController? _controller;
   Object? _error;
   bool _takingPhoto = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(_cameras.first, ResolutionPreset.max);
-    _controller.initialize().then((_) {
+    if (_cameras.isEmpty) {
+      _error = 'Kamera tidak tersedia di perangkat ini';
+      return;
+    }
+    final controller = CameraController(_cameras.first, ResolutionPreset.max);
+    _controller = controller;
+    controller.initialize().then((_) {
       if (mounted) setState(() {});
     }).catchError((Object error) {
       if (mounted) setState(() => _error = error);
@@ -121,15 +131,18 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   Future<void> _takePhoto() async {
-    if (!_controller.value.isInitialized || _takingPhoto) return;
+    final controller = _controller;
+    if (controller == null || !controller.value.isInitialized || _takingPhoto) {
+      return;
+    }
     setState(() => _takingPhoto = true);
     try {
-      final photo = await _controller.takePicture();
+      final photo = await controller.takePicture();
       await Gal.putImage(photo.path, album: 'Praktikum Camera');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -152,7 +165,8 @@ class _CameraPageState extends State<CameraPage> {
     if (_error != null) {
       return Scaffold(body: Center(child: Text('Kamera error: $_error')));
     }
-    if (!_controller.value.isInitialized) {
+    final controller = _controller;
+    if (controller == null || !controller.value.isInitialized) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
@@ -160,7 +174,7 @@ class _CameraPageState extends State<CameraPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          CameraPreview(_controller),
+          CameraPreview(controller),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
