@@ -1,10 +1,9 @@
-import 'dart:ui';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../controllers/player_controller.dart';
-import '../models/song.dart';
-import '../widgets/song_card.dart';
 
 class LyricsPage extends StatefulWidget {
   const LyricsPage({required this.player, this.onClose, super.key});
@@ -18,6 +17,9 @@ class LyricsPage extends StatefulWidget {
 
 class _LyricsPageState extends State<LyricsPage> {
   final ScrollController _scrollController = ScrollController();
+  Timer? _followTimer;
+  DateTime _lastAutoFollow = DateTime.fromMillisecondsSinceEpoch(0);
+  bool _autoFollow = true;
 
   @override
   void initState() {
@@ -28,104 +30,171 @@ class _LyricsPageState extends State<LyricsPage> {
   @override
   void dispose() {
     widget.player.removeListener(_followPlayback);
+    _followTimer?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
 
   void _followPlayback() {
-    if (!widget.player.isPlaying || !_scrollController.hasClients) return;
+    if (!_autoFollow ||
+        !widget.player.isPlaying ||
+        !_scrollController.hasClients) {
+      return;
+    }
+    final now = DateTime.now();
+    if (now.difference(_lastAutoFollow).inMilliseconds < 1100) {
+      return;
+    }
+    _lastAutoFollow = now;
+    _followTimer?.cancel();
+    _followTimer = Timer(const Duration(milliseconds: 30), _moveToPlayback);
+  }
+
+  void _moveToPlayback() {
+    if (!_autoFollow || !_scrollController.hasClients) return;
     final duration = widget.player.duration.inMilliseconds;
     if (duration <= 0) return;
     final progress = (widget.player.position.inMilliseconds / duration).clamp(
       0.0,
       1.0,
     );
+    final target = _scrollController.position.maxScrollExtent * progress;
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent * progress,
-      duration: const Duration(milliseconds: 350),
+      target,
+      duration: const Duration(milliseconds: 260),
       curve: Curves.easeOut,
     );
   }
 
+  bool _handleScroll(ScrollNotification notification) {
+    if (notification is UserScrollNotification &&
+        notification.direction != ScrollDirection.idle) {
+      _autoFollow = false;
+    }
+    return false;
+  }
+
+  void _syncLyrics() {
+    _autoFollow = true;
+    _lastAutoFollow = DateTime.fromMillisecondsSinceEpoch(0);
+    _moveToPlayback();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final player = widget.player;
-    final song = player.currentSong;
+    final song = widget.player.currentSong;
     if (song == null || !song.isLocal) {
-      return SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.music_note_rounded, size: 64, color: Colors.white24),
-              SizedBox(height: 16),
-              Text(
-                song == null
-                    ? 'Belum ada lagu yang diputar'
-                    : 'Lirik hanya tersedia untuk lagu lokal',
-              ),
-              SizedBox(height: 6),
-              Text(
-                'Putar lagu dari menu Trending',
-                style: TextStyle(color: Colors.white54),
-              ),
-            ],
-          ),
-        ),
-      );
+      return _EmptyLyrics(onClose: widget.onClose, hasSong: song != null);
     }
-    final lyrics = song.lyrics;
-    return AnimatedBuilder(
-      animation: player,
-      builder: (context, _) => SafeArea(
-        bottom: false,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: song.artworkAsset != null
-                  ? Image.asset(song.artworkAsset!, fit: BoxFit.cover)
-                  : song.artworkUrl != null
-                  ? Image.network(song.artworkUrl!, fit: BoxFit.cover)
-                  : Container(color: Color(song.artworkColor)),
-            ),
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                child: Container(color: const Color(0xD90B0F17)),
-              ),
-            ),
-            CustomScrollView(
+
+    return SafeArea(
+      bottom: false,
+      child: Stack(
+        children: [
+          NotificationListener<ScrollNotification>(
+            onNotification: _handleScroll,
+            child: CustomScrollView(
               controller: _scrollController,
               slivers: [
                 SliverToBoxAdapter(
-                  child: _Header(onClose: widget.onClose, player: player),
+                  child: _Header(onClose: widget.onClose, onSync: _syncLyrics),
                 ),
-                SliverToBoxAdapter(child: _SongInfo(song: song)),
-                SliverToBoxAdapter(child: _Controls(player: player)),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 28, 24, 14),
+                    child: Text(
+                      'Lirik Lagu',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: .58),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
                 SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(26, 24, 26, 170),
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 160),
                   sliver: SliverList.builder(
-                    itemCount: lyrics.isEmpty ? 1 : lyrics.length,
+                    itemCount: song.lyrics.isEmpty ? 1 : song.lyrics.length,
                     itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 9),
                       child: Text(
-                        lyrics.isEmpty ? 'Lirik belum tersedia' : lyrics[index],
+                        song.lyrics.isEmpty
+                            ? 'Lirik belum tersedia'
+                            : song.lyrics[index],
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: lyrics.isEmpty || index == 0 ? 22 : 18,
-                          height: 1.35,
-                          fontWeight: lyrics.isEmpty || index == 0
-                              ? FontWeight.w700
-                              : FontWeight.w400,
-                          color: lyrics.isEmpty || index == 0
-                              ? Colors.white
-                              : Colors.white.withValues(alpha: .52),
+                          fontSize: song.lyrics.isEmpty ? 22 : 19,
+                          height: 1.42,
+                          color: Colors.white.withValues(
+                            alpha: song.lyrics.isEmpty ? 1 : .78,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            left: 24,
+            right: 24,
+            bottom: 24,
+            child: _LyricsControls(player: widget.player),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LyricsControls extends StatelessWidget {
+  const _LyricsControls({required this.player});
+
+  final PlayerController player;
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xF21B2433),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black38,
+              blurRadius: 18,
+              offset: Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.music_note_rounded, color: Colors.white60),
+            const SizedBox(width: 10),
+            const Expanded(
+              child: Text(
+                'Sedang diputar',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            AnimatedBuilder(
+              animation: player.playbackStatus,
+              builder: (context, _) => IconButton.filled(
+                onPressed: player.toggle,
+                tooltip: player.isPlaying ? 'Jeda' : 'Putar',
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                ),
+                icon: Icon(
+                  player.isPlaying
+                      ? Icons.pause_rounded
+                      : Icons.play_arrow_rounded,
+                ),
+              ),
             ),
           ],
         ),
@@ -135,17 +204,18 @@ class _LyricsPageState extends State<LyricsPage> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({this.onClose, required this.player});
+  const _Header({this.onClose, required this.onSync});
   final VoidCallback? onClose;
-  final PlayerController player;
+  final VoidCallback onSync;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         IconButton(
           onPressed: onClose,
-          tooltip: 'Kembali',
-          icon: const Icon(Icons.keyboard_arrow_down_rounded),
+          tooltip: 'Kembali ke pemutar',
+          icon: const Icon(Icons.arrow_back_rounded),
         ),
         const Expanded(
           child: Center(
@@ -156,128 +226,43 @@ class _Header extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: player.toggleFavorite,
-          tooltip: 'Suka',
-          icon: Icon(
-            player.isCurrentFavorite
-                ? Icons.favorite_rounded
-                : Icons.favorite_border_rounded,
-          ),
-        ),
-        IconButton(
-          onPressed: () => ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Menu lagu dibuka'))),
-          tooltip: 'Lainnya',
-          icon: const Icon(Icons.more_vert_rounded),
+          onPressed: onSync,
+          tooltip: 'Sinkronkan lirik',
+          icon: const Icon(Icons.sync_rounded),
         ),
       ],
     );
   }
 }
 
-class _SongInfo extends StatelessWidget {
-  const _SongInfo({required this.song});
-  final Song song;
+class _EmptyLyrics extends StatelessWidget {
+  const _EmptyLyrics({required this.onClose, required this.hasSong});
+  final VoidCallback? onClose;
+  final bool hasSong;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Artwork(song: song, size: 245),
-        const SizedBox(height: 18),
-        Text(
-          song.title,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          song.artist,
-          style: TextStyle(fontSize: 17, color: Colors.white60),
-        ),
-      ],
-    );
-  }
-}
-
-class _Controls extends StatelessWidget {
-  const _Controls({required this.player});
-  final PlayerController player;
-
-  @override
-  Widget build(BuildContext context) {
-    final max = player.duration.inMilliseconds.toDouble();
-    final value = player.position.inMilliseconds
-        .clamp(0, player.duration.inMilliseconds)
-        .toDouble();
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 18, 24, 0),
+    return SafeArea(
       child: Column(
         children: [
-          Slider(
-            value: max == 0 ? 0 : value,
-            max: max == 0 ? 1 : max,
-            onChanged: (v) => player.seek(Duration(milliseconds: v.round())),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+              onPressed: onClose,
+              icon: const Icon(Icons.arrow_back_rounded),
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(_time(player.position)),
-              Text(_time(player.duration)),
-            ],
+          const Spacer(),
+          const Icon(Icons.lyrics_rounded, size: 64, color: Colors.white24),
+          const SizedBox(height: 16),
+          Text(
+            hasSong
+                ? 'Lirik hanya tersedia untuk lagu lokal'
+                : 'Belum ada lagu yang diputar',
           ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                onPressed: player.toggleShuffle,
-                tooltip: 'Acak',
-                icon: Icon(
-                  Icons.shuffle_rounded,
-                  color: player.shuffleEnabled ? Colors.blueAccent : null,
-                ),
-              ),
-              IconButton(
-                onPressed: player.previous,
-                tooltip: 'Sebelumnya',
-                icon: const Icon(Icons.skip_previous_rounded, size: 32),
-              ),
-              IconButton.filled(
-                onPressed: player.toggle,
-                tooltip: player.isPlaying ? 'Jeda' : 'Putar',
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  minimumSize: const Size(64, 64),
-                ),
-                icon: Icon(
-                  player.isPlaying
-                      ? Icons.pause_rounded
-                      : Icons.play_arrow_rounded,
-                  size: 34,
-                ),
-              ),
-              IconButton(
-                onPressed: player.next,
-                tooltip: 'Berikutnya',
-                icon: const Icon(Icons.skip_next_rounded, size: 32),
-              ),
-              IconButton(
-                onPressed: player.toggleRepeat,
-                tooltip: 'Ulangi',
-                icon: Icon(
-                  Icons.repeat_rounded,
-                  color: player.repeatEnabled ? Colors.blueAccent : null,
-                ),
-              ),
-            ],
-          ),
+          const Spacer(),
         ],
       ),
     );
-  }
-
-  String _time(Duration d) {
-    return '${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 }

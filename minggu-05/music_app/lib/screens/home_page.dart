@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../controllers/player_controller.dart';
 import '../models/song.dart';
 import '../services/spotify_service.dart';
 import '../widgets/song_card.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({required this.onPlay, super.key});
+  const HomePage({required this.onPlay, required this.player, super.key});
 
   final ValueChanged<Song> onPlay;
+  final PlayerController player;
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +36,25 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 150),
-            sliver: SliverList.builder(
-              itemCount: songs.length,
-              itemBuilder: (context, index) => SongCard(
-                song: songs[index],
-                onPlay: () => onPlay(songs[index]),
+          SliverToBoxAdapter(
+            child: AnimatedBuilder(
+              animation: player.playbackStatus,
+              builder: (context, _) => Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 150),
+                child: Column(
+                  children: songs
+                      .map(
+                        (song) => SongCard(
+                          song: song,
+                          onPlay: () => onPlay(song),
+                          isCurrent: player.currentSong?.id == song.id,
+                          isPlaying:
+                              player.currentSong?.id == song.id &&
+                              player.isPlaying,
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ),
           ),

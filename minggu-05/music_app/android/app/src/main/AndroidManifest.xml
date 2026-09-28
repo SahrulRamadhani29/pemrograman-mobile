@@ -3,10 +3,7 @@
     <application
         android:label="music_app"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
-        <meta-data
-            android:name="io.flutter.embedding.android.EnableImpeller"
-            android:value="false" />
+        android:icon="@drawable/ic_launcher_music">
         <activity
             android:name=".MainActivity"
             android:exported="true"

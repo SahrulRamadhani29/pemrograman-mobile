@@ -13,6 +13,7 @@ class PlayerController extends ChangeNotifier {
   }
 
   final AudioPlayer _player = AudioPlayer();
+  final ValueNotifier<int> playbackStatus = ValueNotifier<int>(0);
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<PlayerState>? _stateSubscription;
 
@@ -32,11 +33,13 @@ class PlayerController extends ChangeNotifier {
       notifyListeners();
     });
     _stateSubscription = _player.playerStateStream.listen((state) {
+      final wasPlaying = isPlaying;
       isPlaying = state.playing;
       if (state.processingState == ProcessingState.completed &&
           !repeatEnabled) {
         next();
       }
+      if (wasPlaying != isPlaying) _notifyPlaybackStatus();
       notifyListeners();
     });
     notifyListeners();
@@ -69,12 +72,21 @@ class PlayerController extends ChangeNotifier {
       isLocal: song.isLocal,
     );
     currentIndex = queue.indexWhere((item) => item.id == song.id);
-    await _player.play();
-    notifyListeners();
+    _setPlaying(true);
+    unawaited(_player.play().catchError((Object _) => _setPlaying(false)));
     return true;
   }
 
-  Future<void> toggle() => isPlaying ? _player.pause() : _player.play();
+  Future<void> toggle() async {
+    if (isPlaying) {
+      _setPlaying(false);
+      await _player.pause();
+      return;
+    }
+
+    _setPlaying(true);
+    unawaited(_player.play().catchError((Object _) => _setPlaying(false)));
+  }
 
   Future<void> seek(Duration value) => _player.seek(value);
 
@@ -110,6 +122,7 @@ class PlayerController extends ChangeNotifier {
     final id = currentSong?.id;
     if (id == null) return;
     favoriteIds.contains(id) ? favoriteIds.remove(id) : favoriteIds.add(id);
+    _notifyPlaybackStatus();
     notifyListeners();
   }
 
@@ -151,10 +164,22 @@ class PlayerController extends ChangeNotifier {
     }
   }
 
+  void _notifyPlaybackStatus() {
+    playbackStatus.value++;
+  }
+
+  void _setPlaying(bool value) {
+    if (isPlaying == value) return;
+    isPlaying = value;
+    _notifyPlaybackStatus();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _positionSubscription?.cancel();
     _stateSubscription?.cancel();
+    playbackStatus.dispose();
     _player.dispose();
     super.dispose();
   }

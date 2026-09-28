@@ -51,18 +51,30 @@ class SongCard extends StatelessWidget {
   const SongCard({
     required this.song,
     required this.onPlay,
+    this.isCurrent = false,
+    this.isPlaying = false,
     this.onMore,
     super.key,
   });
 
   final Song song;
   final VoidCallback onPlay;
+  final bool isCurrent;
+  final bool isPlaying;
   final VoidCallback? onMore;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
       height: 76,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: isCurrent
+            ? Colors.white.withValues(alpha: .08)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(14),
+      ),
       child: Row(
         children: [
           SizedBox(
@@ -87,9 +99,10 @@ class SongCard extends StatelessWidget {
                   song.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    color: isCurrent ? const Color(0xFF76A4FF) : Colors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -103,10 +116,12 @@ class SongCard extends StatelessWidget {
           IconButton(
             onPressed: onPlay,
             tooltip: 'Putar ${song.title}',
-            icon: const Icon(
-              Icons.play_arrow_rounded,
+            icon: Icon(
+              isCurrent && isPlaying
+                  ? Icons.graphic_eq_rounded
+                  : Icons.play_arrow_rounded,
               size: 27,
-              color: Colors.white70,
+              color: isCurrent ? const Color(0xFF76A4FF) : Colors.white70,
             ),
           ),
           IconButton(

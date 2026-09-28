@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../controllers/player_controller.dart';
 import '../models/song.dart';
 import '../services/spotify_service.dart';
 import '../widgets/song_card.dart';
 
 class TrendingPage extends StatefulWidget {
-  const TrendingPage({required this.onPlay, this.onSongsLoaded, super.key});
+  const TrendingPage({
+    required this.onPlay,
+    this.onSongsLoaded,
+    required this.player,
+    super.key,
+  });
 
   final ValueChanged<Song> onPlay;
   final ValueChanged<List<Song>>? onSongsLoaded;
+  final PlayerController player;
 
   @override
   State<TrendingPage> createState() => _TrendingPageState();
@@ -67,6 +74,8 @@ class _TrendingPageState extends State<TrendingPage> {
                   child: _HeroSong(
                     song: songs.first,
                     onPlay: () => widget.onPlay(songs.first),
+                    isCurrent: widget.player.currentSong?.id == songs.first.id,
+                    isPlaying: widget.player.isPlaying,
                   ),
                 ),
               ),
@@ -80,6 +89,10 @@ class _TrendingPageState extends State<TrendingPage> {
                       song: song,
                       onPlay: () => widget.onPlay(song),
                       onMore: () => _showSongOptions(context, song),
+                      isCurrent: widget.player.currentSong?.id == song.id,
+                      isPlaying:
+                          widget.player.currentSong?.id == song.id &&
+                          widget.player.isPlaying,
                     );
                   },
                 ),
@@ -208,9 +221,16 @@ class _Header extends StatelessWidget {
 }
 
 class _HeroSong extends StatelessWidget {
-  const _HeroSong({required this.song, required this.onPlay});
+  const _HeroSong({
+    required this.song,
+    required this.onPlay,
+    required this.isCurrent,
+    required this.isPlaying,
+  });
   final Song song;
   final VoidCallback onPlay;
+  final bool isCurrent;
+  final bool isPlaying;
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +293,12 @@ class _HeroSong extends StatelessWidget {
                       foregroundColor: Colors.black,
                       minimumSize: const Size(52, 52),
                     ),
-                    icon: const Icon(Icons.play_arrow_rounded, size: 30),
+                    icon: Icon(
+                      isCurrent && isPlaying
+                          ? Icons.graphic_eq_rounded
+                          : Icons.play_arrow_rounded,
+                      size: 30,
+                    ),
                   ),
                 ],
               ),

@@ -4,7 +4,7 @@
     <application
         android:label="camera_geolocation"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/ic_launcher_camera">
         <meta-data
             android:name="io.flutter.embedding.android.EnableImpeller"
             android:value="false" />

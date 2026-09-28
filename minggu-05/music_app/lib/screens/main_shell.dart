@@ -7,6 +7,7 @@ import '../widgets/bottom_nav.dart';
 import '../widgets/mini_player.dart';
 import 'home_page.dart';
 import 'lyrics_page.dart';
+import 'player_page.dart';
 import 'trending_page.dart';
 
 class MainShell extends StatefulWidget {
@@ -19,6 +20,7 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   final PlayerController _player = PlayerController();
   int currentIndex = 0;
+  int _lastMenuIndex = 0;
 
   @override
   void dispose() {
@@ -29,40 +31,63 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final pages = [
-      HomePage(onPlay: _selectLocalSong),
-      TrendingPage(onPlay: _selectSong, onSongsLoaded: _player.setQueue),
+      HomePage(onPlay: _selectLocalSong, player: _player),
+      TrendingPage(
+        onPlay: _selectSong,
+        onSongsLoaded: _player.setQueue,
+        player: _player,
+      ),
       LyricsPage(
         player: _player,
-        onClose: () => setState(() => currentIndex = 1),
+        onClose: () => setState(() => currentIndex = 3),
+      ),
+      PlayerPage(
+        player: _player,
+        onClose: () => setState(() => currentIndex = _lastMenuIndex),
+        onOpenLyrics: () => setState(() => currentIndex = 2),
       ),
     ];
-    return AnimatedBuilder(
-      animation: _player,
-      builder: (context, _) => Scaffold(
-        body: IndexedStack(index: currentIndex, children: pages),
-        bottomNavigationBar: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_player.currentSong != null && currentIndex != 2)
-              MiniPlayer(
-                song: _player.currentSong!,
-                isPlaying: _player.isPlaying,
-                onPlay: _player.toggle,
-                onOpen: _player.currentSong!.isLocal
-                    ? () => setState(() => currentIndex = 2)
-                    : () {},
+    return Scaffold(
+      body: IndexedStack(index: currentIndex, children: pages),
+      bottomNavigationBar: currentIndex >= 2
+          ? null
+          : AnimatedBuilder(
+              animation: _player.playbackStatus,
+              builder: (context, _) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (_player.currentSong != null)
+                    MiniPlayer(
+                      song: _player.currentSong!,
+                      isPlaying: _player.isPlaying,
+                      onPlay: _player.toggle,
+                      onOpen: () => setState(() => currentIndex = 3),
+                    ),
+                  BottomNav(
+                    index: currentIndex,
+                    onChanged: (value) {
+                      if (value == 2) {
+                        setState(() => currentIndex = 2);
+                        return;
+                      }
+                      setState(() {
+                        currentIndex = value;
+                        _lastMenuIndex = value;
+                      });
+                    },
+                  ),
+                ],
               ),
-            BottomNav(
-              index: currentIndex,
-              onChanged: (value) => setState(() => currentIndex = value),
             ),
-          ],
-        ),
-      ),
     );
   }
 
   Future<void> _selectSong(Song song) async {
+    if (_player.currentSong?.id == song.id) {
+      await _player.toggle();
+      if (mounted) setState(() => currentIndex = 3);
+      return;
+    }
     final available = await _player.selectSong(song);
     if (!available && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -71,10 +96,15 @@ class _MainShellState extends State<MainShell> {
         ),
       );
     }
-    if (available && song.audioAsset != null) setState(() => currentIndex = 2);
+    if (available && mounted) setState(() => currentIndex = 3);
   }
 
   Future<void> _selectLocalSong(Song song) async {
+    if (_player.currentSong?.id == song.id) {
+      await _player.toggle();
+      if (mounted) setState(() => currentIndex = 3);
+      return;
+    }
     _player.setQueue(SpotifyService().getDownloadedSongs());
     final available = await _player.selectSong(song);
     if (!available && mounted) {
@@ -83,6 +113,6 @@ class _MainShellState extends State<MainShell> {
       );
       return;
     }
-    if (mounted) setState(() => currentIndex = 2);
+    if (mounted) setState(() => currentIndex = 3);
   }
 }
