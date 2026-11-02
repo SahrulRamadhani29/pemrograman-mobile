@@ -1,0 +1,5 @@
+Sumber: AudioManager melalui plugin lokal, diperlihatkan pada screenshots/21-perangkat-dan-suara.png.
+ringer_normal=true
+notification_volume=3
+max_volume=7
+Channel pengumuman: importance HIGH, sound content://settings/system/notification_sound.

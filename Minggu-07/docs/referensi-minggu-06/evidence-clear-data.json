@@ -1,0 +1,14 @@
+{
+  "device": "Vivo 1918",
+  "command": "adb shell pm clear id.ac.polinema.sahrul.campus_notify",
+  "pm_clear": "Success",
+  "login_after_clear": true,
+  "backend_device_rows_after_login": 1,
+  "backend_token_updates_after_login": 1,
+  "token_changed_compared_with_previous_registration": true,
+  "token_preview_before": "d5CGhqMhSu-B...",
+  "token_preview_after": "cg4FpuGpQ0ym...",
+  "read_state_preserved_on_server": true,
+  "onTokenRefresh_events_in_fresh_process": 0,
+  "note": "Token awal baru didaftarkan melalui getToken. Bukti event onTokenRefresh berasal dari uji rotasi terpisah, bukan diklaim terjadi saat pm clear."
+}

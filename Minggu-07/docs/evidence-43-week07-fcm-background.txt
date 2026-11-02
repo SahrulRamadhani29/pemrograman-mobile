@@ -1,0 +1,205 @@
+    NotificationRecord(0x00c9d79f: pkg=id.ac.polinema.sahrul.campus_notify user=UserHandle{0} id=2147483647 tag=ranker_group importance=4 key=0|id.ac.polinema.sahrul.campus_notify|2147483647|ranker_group|10009|ranker_group: Notification(channel=pengumuman shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x700 color=0x00000000 groupKey=ranker_group vis=PRIVATE internalType=0 internalPriority=0 internalGroupPriority=0 internalFlag=0))
+      uid=10009 userId=0
+      opPkg=id.ac.polinema.sahrul.campus_notify
+      icon=Icon(typ=RESOURCE pkg=id.ac.polinema.sahrul.campus_notify id=0x7f07007b)
+      flags=0x700
+      pri=0
+      key=0|id.ac.polinema.sahrul.campus_notify|2147483647|ranker_group|10009|ranker_group
+      seen=true
+      groupKey=0|id.ac.polinema.sahrul.campus_notify|g:ranker_group
+      fullscreenIntent=null
+      contentIntent=PendingIntent{26750f5: PendingIntentRecord{97f1766 android startActivity}}
+      deleteIntent=null
+      number=0
+      groupAlertBehavior=2
+      when=1793596253057
+      tickerText=null
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0x00000000      timeout=unknown
+      extras={
+          android.reduced.images=Boolean (true)
+          android.appInfo=ApplicationInfo (ApplicationInfo{227fb57 id.ac.polinema.sahrul.campus_notify})
+          android.showWhen=Boolean (true)
+          vivo.summaryIconRes=Integer (0)
+      }
+      stats=SingleNotificationStats{posttimeElapsedMs=161032012, posttimeToFirstClickMs=-1, posttimeToDismissMs=-1, airtimeCount=1, airtimeMs=0, currentAirtimeStartElapsedMs=161050485, airtimeExpandedMs=0, posttimeToFirstVisibleExpansionMs=67570, currentAirtimeExpandedStartElapsedMs=161099582, requestedImportance=3, naturalImportance=4, isNoisy=true}
+      mContactAffinity=0.0
+      mRecentlyIntrusive=false
+      mPackagePriority=0
+      mPackageVisibility=-1000
+      mSystemImportance=UNSPECIFIED
+      mAsstImportance=UNSPECIFIED
+      mImportance=HIGH
+      mImportanceExplanation=app
+      mIsAppImportanceLocked=false
+      mIntercept=false
+      mHidden==false
+      mGlobalSortKey=crtcl=0x0002:intrsv=1:grnk=0x0003:gsmry=0:nsk:rnk=0x0007
+      mRankingTimeMs=1793596253057
+      mCreationTimeMs=1793596253058
+      mVisibleSinceMs=1793596271734
+      mUpdateTimeMs=1793596253058
+      mBasedTime=161031809
+      mInterruptionTimeMs=1793596253058
+      mSuppressedVisualEffects= 0
+      mSound= content://settings/system/notification_sound
+      mVibration= [J@3264e8a
+      mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null
+      mLight= null
+      mShowBadge=true
+      mColorized=false
+      mAllowBubble=false
+      isBubble=false
+      mIsInterruptive=false
+      effectiveNotificationChannel=NotificationChannel{mId='pengumuman', mName=Pengumuman Kampus, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=false, mVibrationEnabled=true, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedByOEM=false, mImportanceLockedDefaultApp=false, mOriginalImp=4, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false, mEnableClassify=true}
+      mAdjustments=[]
+      shortcut=null found valid? false
+      mModifiedAdjustment=null
+      sbn=StatusBarNotification(pkg=id.ac.polinema.sahrul.campus_notify user=UserHandle{0} id=2147483647 tag=ranker_group key=0|id.ac.polinema.sahrul.campus_notify|2147483647|ranker_group|10009|ranker_group modified=true: Notification(channel=pengumuman shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x700 color=0x00000000 groupKey=ranker_group vis=PRIVATE internalType=0 internalPriority=0 internalGroupPriority=0 internalFlag=0))
+
+    NotificationRecord(0x0d640e0d: pkg=id.ac.polinema.sahrul.campus_notify user=UserHandle{0} id=12 tag=announcement-12 importance=4 key=0|id.ac.polinema.sahrul.campus_notify|12|announcement-12|10009: Notification(channel=pengumuman shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x10 color=0x00000000 vis=PRIVATE internalType=0 internalPriority=0 internalGroupPriority=0 internalFlag=0))
+      uid=10009 userId=0
+      opPkg=id.ac.polinema.sahrul.campus_notify
+      icon=Icon(typ=RESOURCE pkg=id.ac.polinema.sahrul.campus_notify id=0x7f07007b)
+      flags=0x10
+      pri=1
+      key=0|id.ac.polinema.sahrul.campus_notify|12|announcement-12|10009
+      seen=true
+      groupKey=0|id.ac.polinema.sahrul.campus_notify|g:ranker_group
+      fullscreenIntent=null
+      contentIntent=PendingIntent{dd5acd6: PendingIntentRecord{f652cf8 id.ac.polinema.sahrul.campus_notify startActivity (whitelist: b9a4bc6:+30s0ms)}}
+      deleteIntent=null
+      number=2
+      groupAlertBehavior=0
+      when=1793596143187
+      tickerText=null
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0x00000000      timeout=unknown
+      extras={
+          android.title=String
+          android.reduced.images=Boolean (true)
+          android.chronometerCountDown=Boolean (false)
+          android.subText=null
+          android.showChronometer=Boolean (false)
+          android.text=String
+          android.progress=Integer (0)
+          android.progressMax=Integer (0)
+          android.appInfo=ApplicationInfo (ApplicationInfo{227fb57 id.ac.polinema.sahrul.campus_notify})
+          android.showWhen=Boolean (true)
+          android.largeIcon=null
+          android.infoText=null
+          android.progressIndeterminate=Boolean (false)
+          android.remoteInputHistory=null
+          android.colorized=Boolean (false)
+      }
+      stats=SingleNotificationStats{posttimeElapsedMs=160922161, posttimeToFirstClickMs=-1, posttimeToDismissMs=-1, airtimeCount=3, airtimeMs=9641, currentAirtimeStartElapsedMs=161050490, airtimeExpandedMs=9644, posttimeToFirstVisibleExpansionMs=725, currentAirtimeExpandedStartElapsedMs=-1, requestedImportance=4, naturalImportance=4, isNoisy=true}
+      mContactAffinity=0.0
+      mRecentlyIntrusive=false
+      mPackagePriority=0
+      mPackageVisibility=-1000
+      mSystemImportance=UNSPECIFIED
+      mAsstImportance=HIGH
+      mImportance=HIGH
+      mImportanceExplanation=asst
+      mIsAppImportanceLocked=false
+      mIntercept=false
+      mHidden==false
+      mGlobalSortKey=crtcl=0x0002:intrsv=1:grnk=0x0003:gsmry=1:nsk:rnk=0x0003
+      mRankingTimeMs=1793596143187
+      mCreationTimeMs=1793596143201
+      mVisibleSinceMs=1793596271740
+      mUpdateTimeMs=1793596143201
+      mBasedTime=160921951
+      mInterruptionTimeMs=1793596143410
+      mSuppressedVisualEffects= 0
+      mSound= content://settings/system/notification_sound
+      mVibration= [J@5e4b644
+      mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null
+      mLight= null
+      mShowBadge=true
+      mColorized=false
+      mAllowBubble=false
+      isBubble=false
+      mIsInterruptive=true
+      effectiveNotificationChannel=NotificationChannel{mId='pengumuman', mName=Pengumuman Kampus, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=false, mVibrationEnabled=true, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedByOEM=false, mImportanceLockedDefaultApp=false, mOriginalImp=4, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false, mEnableClassify=true}
+      mAdjustments=[]
+      shortcut=null found valid? false
+      mModifiedAdjustment=Adjustment{mSignals=Bundle[{key_modified=true}]}
+      sbn=StatusBarNotification(pkg=id.ac.polinema.sahrul.campus_notify user=UserHandle{0} id=12 tag=announcement-12 key=0|id.ac.polinema.sahrul.campus_notify|12|announcement-12|10009 modified=true: Notification(channel=pengumuman shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x10 color=0x00000000 vis=PRIVATE internalType=0 internalPriority=0 internalGroupPriority=0 internalFlag=0))
+
+    NotificationRecord(0x02cc83c1: pkg=id.ac.polinema.sahrul.campus_notify user=UserHandle{0} id=0 tag=campaign_collapse_key_5114726076962082708 importance=4 key=0|id.ac.polinema.sahrul.campus_notify|0|campaign_collapse_key_5114726076962082708|10009: Notification(channel=pengumuman shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x10 color=0x00000000 vis=PRIVATE internalType=0 internalPriority=0 internalGroupPriority=0 internalFlag=0))
+      uid=10009 userId=0
+      opPkg=id.ac.polinema.sahrul.campus_notify
+      icon=Icon(typ=RESOURCE pkg=id.ac.polinema.sahrul.campus_notify id=0x7f07007b)
+      flags=0x10
+      pri=0
+      key=0|id.ac.polinema.sahrul.campus_notify|0|campaign_collapse_key_5114726076962082708|10009
+      seen=true
+      groupKey=0|id.ac.polinema.sahrul.campus_notify|g:ranker_group
+      fullscreenIntent=null
+      contentIntent=PendingIntent{bf9acfb: PendingIntentRecord{47ac642 id.ac.polinema.sahrul.campus_notify startActivity (whitelist: b9a4bc6:+30s0ms)}}
+      deleteIntent=PendingIntent{1255118: PendingIntentRecord{698748d id.ac.polinema.sahrul.campus_notify broadcastIntent (whitelist: b9a4bc6:+30s0ms)}}
+      number=0
+      groupAlertBehavior=0
+      when=1793596252811
+      tickerText=null
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0x00000000      timeout=unknown
+      extras={
+          android.title=String
+          android.reduced.images=Boolean (true)
+          android.subText=null
+          android.template=String
+          android.showChronometer=Boolean (false)
+          android.text=String
+          android.progress=Integer (0)
+          androidx.core.app.extra.COMPAT_TEMPLATE=String
+          android.progressMax=Integer (0)
+          android.appInfo=ApplicationInfo (ApplicationInfo{c290771 id.ac.polinema.sahrul.campus_notify})
+          android.showWhen=Boolean (true)
+          android.largeIcon=null
+          android.bigText=String
+          android.infoText=null
+          android.progressIndeterminate=Boolean (false)
+          android.remoteInputHistory=null
+      }
+      stats=SingleNotificationStats{posttimeElapsedMs=161031781, posttimeToFirstClickMs=-1, posttimeToDismissMs=-1, airtimeCount=2, airtimeMs=5133, currentAirtimeStartElapsedMs=161050491, airtimeExpandedMs=5136, posttimeToFirstVisibleExpansionMs=807, currentAirtimeExpandedStartElapsedMs=-1, requestedImportance=3, naturalImportance=4, isNoisy=true}
+      mContactAffinity=0.0
+      mRecentlyIntrusive=false
+      mPackagePriority=0
+      mPackageVisibility=-1000
+      mSystemImportance=UNSPECIFIED
+      mAsstImportance=HIGH
+      mImportance=HIGH
+      mImportanceExplanation=asst
+      mIsAppImportanceLocked=false
+      mIntercept=false
+      mHidden==false
+      mGlobalSortKey=crtcl=0x0002:intrsv=1:grnk=0x0003:gsmry=1:nsk:rnk=0x0005
+      mRankingTimeMs=1793596252811
+      mCreationTimeMs=1793596252827
+      mVisibleSinceMs=1793596271741
+      mUpdateTimeMs=1793596252827
+      mBasedTime=161031578
+      mInterruptionTimeMs=1793596253030
+      mSuppressedVisualEffects= 0
+      mSound= content://settings/system/notification_sound
+      mVibration= [J@22c956
+      mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null
+      mLight= null
+      mShowBadge=true
+      mColorized=false
+      mAllowBubble=false
+      isBubble=false
+      mIsInterruptive=true
+      effectiveNotificationChannel=NotificationChannel{mId='pengumuman', mName=Pengumuman Kampus, mDescription=hasDescription , mImportance=4, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=false, mVibrationEnabled=true, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedByOEM=false, mImportanceLockedDefaultApp=false, mOriginalImp=4, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false, mEnableClassify=true}
+      mAdjustments=[]
+      shortcut=null found valid? false
+      mModifiedAdjustment=Adjustment{mSignals=Bundle[{key_modified=true}]}
+      sbn=StatusBarNotification(pkg=id.ac.polinema.sahrul.campus_notify user=UserHandle{0} id=0 tag=campaign_collapse_key_5114726076962082708 key=0|id.ac.polinema.sahrul.campus_notify|0|campaign_collapse_key_5114726076962082708|10009 modified=true: Notification(channel=pengumuman shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x10 color=0x00000000 vis=PRIVATE internalType=0 internalPriority=0 internalGroupPriority=0 internalFlag=0))

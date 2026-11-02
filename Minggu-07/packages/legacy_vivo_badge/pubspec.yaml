@@ -1,0 +1,16 @@
+name: legacy_vivo_badge
+description: Dukungan badge untuk launcher lama Vivo pada perangkat praktikum.
+version: 1.0.0
+publish_to: none
+environment:
+  sdk: '>=3.8.0 <4.0.0'
+  flutter: '>=3.27.0'
+dependencies:
+  flutter:
+    sdk: flutter
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: id.ac.polinema.sahrul.legacybadge
+        pluginClass: LegacyVivoBadgePlugin

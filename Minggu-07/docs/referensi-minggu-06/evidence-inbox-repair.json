@@ -1,0 +1,24 @@
+{
+  "flutter_tests": 14,
+  "backend_tests": 14,
+  "backend_assertions": 68,
+  "pending_messages_after_fix": 0,
+  "messages": [
+    {
+      "id": 8,
+      "title": "test woi",
+      "read_at": "2026-11-02 03:49:21"
+    },
+    {
+      "id": 9,
+      "title": "Pengumuman",
+      "read_at": "2026-11-02 03:49:18"
+    },
+    {
+      "id": 10,
+      "title": "test final week 6",
+      "read_at": null
+    }
+  ],
+  "apk_sha256": "4fab39bca20bdef0a596e456a85f40ac444dbcc98603b42b6fdfe12a32988272"
+}

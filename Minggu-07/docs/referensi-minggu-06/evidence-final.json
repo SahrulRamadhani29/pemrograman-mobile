@@ -1,0 +1,15 @@
+{
+  "flutter_analyze": "No issues found",
+  "flutter_tests_passed": 14,
+  "backend_tests_passed": 14,
+  "backend_assertions": 68,
+  "apk_build": "debug successful",
+  "apk_sha256": "4fab39bca20bdef0a596e456a85f40ac444dbcc98603b42b6fdfe12a32988272",
+  "final_sessions": 1,
+  "final_registered_devices": 1,
+  "unread_inbox_count": 1,
+  "announcement_6_read": true,
+  "push_received_after_clear_data": true,
+  "sound_audible_confirmation": "confirmed by user on 2026-11-02: ada nnotifikasi suara dan popup",
+  "inbox_sync_repair": "verified on Vivo: pending queue empty, unread message visible after refresh"
+}
